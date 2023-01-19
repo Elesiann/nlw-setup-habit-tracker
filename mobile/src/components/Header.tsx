@@ -6,6 +6,7 @@ import Logo from "../assets/logo.svg";
 export function Header() {
   return (
     <View className="w-full flex-row items-center justify-between">
+      {/* <Logo /> */}
       <Text className="text-3xl w-fit font-extrabold bg-gradient-to-l text-blue-700">
         Momentum
       </Text>
