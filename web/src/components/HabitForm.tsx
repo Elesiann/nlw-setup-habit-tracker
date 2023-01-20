@@ -16,7 +16,7 @@ export function HabitForm() {
       />
 
       <label htmlFor="" className="font-semibold leading-tight mt-4">
-        What's the recurrence?
+        What's the frequency?
       </label>
 
       <button

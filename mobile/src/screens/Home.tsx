@@ -2,6 +2,7 @@ import { View, Text, ScrollView } from "react-native";
 import { Habit, daySize } from "../components/Habit";
 import { Header } from "../components/Header";
 import { daysFromYearBeggining } from "../utils/utils";
+import { useNavigation } from "@react-navigation/native";
 
 const weekDays = ["S", "M", "T", "W", "T", "F", "S"];
 const daysUntilNow = daysFromYearBeggining();
@@ -9,6 +10,7 @@ const minimumDatesSize = 18 * 5;
 const amountRemainingDays = minimumDatesSize - daysUntilNow.length;
 
 export function Home() {
+  const { navigate } = useNavigation();
   return (
     <View className="flex-1 bg-[#181D26] px-8 pt-16">
       <Header />
@@ -29,8 +31,11 @@ export function Home() {
         contentContainerStyle={{ paddingBottom: 48 }}
       >
         <View className="flex-row flex-wrap">
-          {daysUntilNow.map((day, index) => (
-            <Habit key={day.toISOString()} />
+          {daysUntilNow.map((day) => (
+            <Habit
+              onPress={() => navigate("habit", { date: day.toISOString() })}
+              key={day.toISOString()}
+            />
           ))}
           {amountRemainingDays > 0 &&
             Array.from({ length: amountRemainingDays }).map((_, index) => (
