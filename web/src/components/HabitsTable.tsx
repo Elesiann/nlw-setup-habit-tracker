@@ -8,6 +8,8 @@ export function HabitsTable() {
   const minimumDatesSize = 18 * 7;
   const amountRemainingDays = minimumDatesSize - daysUntilNow.length;
 
+  const date = new Date();
+
   return (
     <div className="w-full flex ">
       <div className="grid grid-rows-7 grid-flow-row gap-3">
@@ -22,7 +24,12 @@ export function HabitsTable() {
       </div>
       <div className="grid grid-rows-7 grid-flow-col gap-3">
         {daysUntilNow.map((day, index) => (
-          <Habit key={`${day}-${index}`} />
+          <Habit
+            date={date}
+            amount={5}
+            completed={Math.round(Math.random() * 5)}
+            key={`${day}-${index}`}
+          />
         ))}
         {amountRemainingDays > 0 &&
           Array.from({ length: amountRemainingDays }).map((_, index) => (
