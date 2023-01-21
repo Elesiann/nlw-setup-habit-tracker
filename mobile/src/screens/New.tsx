@@ -1,6 +1,7 @@
 import { Feather } from "@expo/vector-icons";
 import { useState } from "react";
 import {
+  Alert,
   ScrollView,
   Text,
   TextInput,
@@ -11,6 +12,7 @@ import colors from "tailwindcss/colors";
 
 import { BackButton } from "../components/BackButton";
 import { Checkbox } from "../components/Checkbox";
+import { api } from "../lib/axios";
 
 const availableWeekDays = [
   "Sunday",
@@ -33,6 +35,25 @@ export function New() {
       );
     } else {
       setWeekDays((prevState) => [...prevState, weekDayIndex]);
+    }
+  }
+
+  async function handleCreateNewHabit() {
+    try {
+      if (!title.trim() || weekDays.length === 0) {
+        Alert.alert("Hey!", "Fill habit name and frequency.");
+        return;
+      }
+
+      await api.post("/habits", { title, weekDays });
+
+      setTitle("");
+      setWeekDays([]);
+
+      Alert.alert("New habit", "Success! New habit created!");
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Oops", "Oops... Something went wrong");
     }
   }
 
@@ -76,6 +97,7 @@ export function New() {
         <TouchableOpacity
           className="w-full h-14 flex-row items-center justify-center bg-blue-600 rounded-md mt-6"
           activeOpacity={0.7}
+          onPress={handleCreateNewHabit}
         >
           <Text className="font-semibold text-base text-white mr-2">
             Create

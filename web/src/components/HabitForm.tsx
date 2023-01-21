@@ -23,7 +23,7 @@ export function HabitForm() {
     event.preventDefault();
 
     if (!title || weekDays.length === 0) {
-      toast.warning("Please, fill habit name and frequency");
+      toast.warning("Fill habit name and frequency");
       return;
     }
     await api
