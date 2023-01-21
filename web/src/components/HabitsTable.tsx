@@ -38,29 +38,31 @@ export function HabitsTable() {
         ))}
       </div>
 
-      <div className="grid grid-rows-7 grid-flow-col gap-3">
-        {daysUntilNow.map((date, index) => {
-          const summaryDay = summary.find((day) => {
-            return dayjs(date).isSame(day.date, "day");
-          });
+      {summary.length > 0 && (
+        <div className="grid grid-rows-7 grid-flow-col gap-3">
+          {daysUntilNow.map((date, index) => {
+            const summaryDay = summary.find((day) => {
+              return dayjs(date).isSame(day.date, "day");
+            });
 
-          return (
-            <Habit
-              date={date}
-              amount={summaryDay?.amount}
-              completed={summaryDay?.completed}
-              key={`${date}-${index}`}
-            />
-          );
-        })}
-        {amountRemainingDays > 0 &&
-          Array.from({ length: amountRemainingDays }).map((_, index) => (
-            <div
-              key={index}
-              className="w-10 h-10 bg-charcoal border border-blackCoral rounded-lg opacity-40 cursor-not-allowed"
-            />
-          ))}
-      </div>
+            return (
+              <Habit
+                date={date}
+                amount={summaryDay?.amount}
+                defaultCompleted={summaryDay?.completed}
+                key={`${date}-${index}`}
+              />
+            );
+          })}
+          {amountRemainingDays > 0 &&
+            Array.from({ length: amountRemainingDays }).map((_, index) => (
+              <div
+                key={index}
+                className="w-10 h-10 bg-charcoal border border-blackCoral rounded-lg opacity-40 cursor-not-allowed"
+              />
+            ))}
+        </div>
+      )}
     </div>
   );
 }
