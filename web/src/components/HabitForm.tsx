@@ -1,10 +1,12 @@
 import * as Checkbox from "@radix-ui/react-checkbox";
 import dayjs from "dayjs";
 import { Check } from "phosphor-react";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { api } from "../lib/axios";
 
 export function HabitForm() {
-  const [formValues, setFormValues] = useState<string>("");
+  const [title, setTitle] = useState<string>("");
   const [weekDays, setWeekDays] = useState<number[]>([]);
 
   const availableWeekDays = [
@@ -17,9 +19,24 @@ export function HabitForm() {
     "Saturday",
   ];
 
-  function createNewHabit(event: FormEvent) {
+  async function createNewHabit(event: FormEvent) {
     event.preventDefault();
-    console.log(formValues);
+
+    if (!title || weekDays.length === 0) {
+      toast.warning("Please, fill habit name and frequency");
+      return;
+    }
+    await api
+      .post("habits", {
+        title,
+        weekDays,
+      })
+      .then(() => {
+        toast.success("Success! New habit created.");
+        setTitle("");
+        setWeekDays([]);
+      })
+      .catch(() => toast.error("Oops... Something went wrong"));
   }
 
   function handleToggleCheckbox(weekDay: number) {
@@ -43,7 +60,8 @@ export function HabitForm() {
         id="title"
         placeholder="ex.: Exercise, 8 hours of sleep..."
         autoFocus
-        onChange={(e) => setFormValues(e.target.value)}
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
       />
 
       <label htmlFor="" className="font-semibold leading-tight mt-4">
@@ -54,6 +72,7 @@ export function HabitForm() {
         <Checkbox.Root
           key={day}
           className="flex items-center gap-3 group focus:outline-none mt-2"
+          checked={weekDays.includes(index)}
           onCheckedChange={() => handleToggleCheckbox(index)}
         >
           <div className="h-8 w-8 rounded-lg flex items-center justify-center bg-charcoal border-2 border-blackCoral group-data-[state=checked]:bg-blue-500 group-data-[state=checked]:border-blue-300 transition-all">

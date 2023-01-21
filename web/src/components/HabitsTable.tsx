@@ -1,14 +1,29 @@
+import dayjs from "dayjs";
+import { useEffect, useState } from "react";
+import { api } from "../lib/axios";
 import { daysFromYearBeggining } from "../utils/utils";
 import { Habit } from "./Habit";
 
+interface ISummary {
+  id: string;
+  date: string;
+  amount: number;
+  completed: number;
+}
+
 export function HabitsTable() {
+  const [summary, setSummary] = useState<ISummary[]>([]);
   const weekDays = ["S", "M", "T", "W", "T", "F", "S"];
 
   const daysUntilNow = daysFromYearBeggining();
   const minimumDatesSize = 18 * 7;
   const amountRemainingDays = minimumDatesSize - daysUntilNow.length;
 
-  const date = new Date();
+  useEffect(() => {
+    api.get("summary").then((res) => {
+      setSummary(res.data);
+    });
+  }, []);
 
   return (
     <div className="w-full flex ">
@@ -22,15 +37,22 @@ export function HabitsTable() {
           </div>
         ))}
       </div>
+
       <div className="grid grid-rows-7 grid-flow-col gap-3">
-        {daysUntilNow.map((day, index) => (
-          <Habit
-            date={date}
-            amount={5}
-            completed={Math.round(Math.random() * 5)}
-            key={`${day}-${index}`}
-          />
-        ))}
+        {daysUntilNow.map((date, index) => {
+          const summaryDay = summary.find((day) => {
+            return dayjs(date).isSame(day.date, "day");
+          });
+
+          return (
+            <Habit
+              date={date}
+              amount={summaryDay?.amount}
+              completed={summaryDay?.completed}
+              key={`${date}-${index}`}
+            />
+          );
+        })}
         {amountRemainingDays > 0 &&
           Array.from({ length: amountRemainingDays }).map((_, index) => (
             <div

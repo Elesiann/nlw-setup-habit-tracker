@@ -1,0 +1,6 @@
+.Toastify__toast {
+  font-weight: 700 !important;
+}
+.Toastify__toast--success {
+  background: #2d6a4f !important;
+}

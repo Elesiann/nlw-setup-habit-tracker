@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import * as Popover from "@radix-ui/react-popover";
 import clsx from "clsx";
 import { ProgressBar } from "./ProgressBar";
@@ -8,13 +8,21 @@ import { Check } from "phosphor-react";
 
 interface HabitProps {
   date: Date;
-  completed: number;
-  amount: number;
+  completed?: number;
+  amount?: number;
 }
 
 export function Habit({ completed = 0, amount = 0, date }: HabitProps) {
+  const [completedHabit, setCompletedHabit] = useState(completed);
   const completedPercentage =
     amount > 0 ? Math.round((completed / amount) * 100) : 0;
+
+  const dayAndMonth = dayjs(date).format("DD/MM");
+  const dayOfWeek = dayjs(date).format("dddd");
+
+  function handleCompletedHabit(completed: number) {
+    setCompletedHabit(completed);
+  }
 
   return (
     <Popover.Root>
@@ -39,8 +47,10 @@ export function Habit({ completed = 0, amount = 0, date }: HabitProps) {
         style={{ border: "1px solid #313B49" }}
         className="min-w-[320px] p-6 rounded-xl bg-gunmetal flex flex-col z-10"
       >
-        <span className="font-semibold text-zinc-400">{"sexta feira"}</span>
-        <span className="mt-1 font-bold leading-tight text-3xl">{"20/01"}</span>
+        <span className="font-semibold text-zinc-400">{dayOfWeek}</span>
+        <span className="mt-1 font-bold leading-tight text-3xl">
+          {dayAndMonth}
+        </span>
 
         <ProgressBar progress={completedPercentage} />
 
