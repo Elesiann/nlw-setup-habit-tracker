@@ -74,8 +74,6 @@ export function Home() {
                 return dayjs(date).isSame(day.date, "day");
               });
 
-              console.log(dayHabits);
-
               return (
                 <Habit
                   date={date}

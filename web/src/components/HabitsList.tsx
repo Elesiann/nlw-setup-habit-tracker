@@ -57,7 +57,6 @@ export function HabitsList({ date, onChange }: IHabitsListProps) {
 
   return (
     <>
-      {console.log(HabitsInfo)}
       {HabitsInfo?.possibleHabits.map((habit, index) => (
         <Checkbox.Root
           key={habit.id}
